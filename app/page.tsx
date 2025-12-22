@@ -1,5 +1,11 @@
-import { ComponentExample } from "@/components/component-example";
+import { ModeToggle } from "@/components/dark-mode-toggle";
+import { BlockNoteEditor } from "@/components/editor";
 
 export default function Page() {
-return <ComponentExample />;
+  return (
+    <div className="min-h-125">
+      <ModeToggle />
+      <BlockNoteEditor />
+    </div>
+  );
 }
