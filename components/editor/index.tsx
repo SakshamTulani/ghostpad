@@ -1,4 +1,6 @@
 "use client";
+import { db } from "@/lib/dexie/db";
+import { useDocument, useLiveQuery } from "dexie-react-hooks";
 import dynamic from "next/dynamic";
 const Editor = dynamic(() => import("./editor"), {
   ssr: false,
@@ -12,5 +14,12 @@ const Editor = dynamic(() => import("./editor"), {
 });
 
 export function BlockNoteEditor() {
-  return <Editor />;
+  const note = useLiveQuery(() => db.notes.get("initial"));
+  console.log(note);
+
+  // Use it's document property (friend is undefined on intial render)
+  const provider = useDocument(note?.content);
+  if (!provider || !note?.content) return null;
+
+  return <Editor provider={provider} doc={note?.content} />;
 }

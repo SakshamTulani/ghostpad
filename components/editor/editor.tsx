@@ -28,12 +28,34 @@ import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { useTheme } from "next-themes";
+import { useDocument, useLiveQuery } from "dexie-react-hooks";
+import { db } from "@/lib/dexie/db";
+import { type DexieYProvider } from "y-dexie";
+import * as Y from "yjs";
 
-export default function Editor() {
-  // Creates a new editor instance.
+export default function Editor({
+  provider,
+  doc,
+}: {
+  provider: DexieYProvider;
+  doc: Y.Doc;
+}) {
   const editor = useCreateBlockNote({
+    collaboration: {
+      provider: provider,
+      fragment: doc.getXmlFragment("document-store"),
+      // Information (name and color) for this user:
+      user: {
+        name: "My Username",
+        color: "#ff0000",
+      },
+      // When to show user labels on the collaboration cursor. Set by default to
+      // "activity" (show when the cursor moves), but can also be set to "always".
+      showCursorLabels: "activity",
+    },
     animations: true,
   });
+
   const theme = useTheme();
   // Renders the editor instance using a React component.
   return (
