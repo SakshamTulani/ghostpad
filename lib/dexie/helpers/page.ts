@@ -11,6 +11,7 @@ export const createPage = async (params: {
   title: string;
   workspaceId: string;
   parentId: string; // Could be workspaceId or another pageId
+  icon?: string;
 }): Promise<string> => {
   const id = generateId();
   const doc = new Y.Doc();
@@ -21,6 +22,7 @@ export const createPage = async (params: {
     title: params.title,
     workspaceId: params.workspaceId,
     parentId: params.parentId,
+    icon: params.icon,
     createdAt: now(),
     updatedAt: now(),
     content: doc,
@@ -37,7 +39,7 @@ export const createPage = async (params: {
  */
 export const updatePage = async (
   id: string,
-  updates: Partial<Omit<Page, "id" | "createdAt" | "content" | "workspaceId">>
+  updates: Partial<Pick<Page, "title" | "icon">>
 ): Promise<void> => {
   await db.pages.update(id, {
     ...updates,

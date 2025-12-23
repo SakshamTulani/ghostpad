@@ -5,13 +5,16 @@ import type * as Y from "yjs";
 export interface Workspace {
   id: string;
   name: string;
+  icon?: string;
   createdAt: number;
   deleted?: boolean;
+  updatedAt: number;
   deletedAt?: number;
 }
 
 export interface Page {
   id: string;
+  icon?: string;
   title: string;
   workspaceId: string;
   parentId: string; // Can be a Workspace ID or another Page ID
@@ -32,20 +35,18 @@ export class GhostpadDatabase extends Dexie {
 
     this.version(1).stores({
       // Workspace index
-      workspaces: `id, name, deleted`,
+      workspaces: `id, name, updatedAt`,
 
       /**
        * Page index:
        * - parentId & workspaceId: For building the recursive tree.
        * - content: Y.Doc: Special syntax for the y-dexie addon.
-       * - deleted: For filtering out items in the trash.
        */
       pages: `
         id, 
         parentId, 
         workspaceId, 
         updatedAt, 
-        deleted,
         content: Y.Doc
       `,
     });

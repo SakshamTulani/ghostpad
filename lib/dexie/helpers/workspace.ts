@@ -6,13 +6,18 @@ import { generateId, now } from "./utils";
  * @param name - The name of the workspace.
  * @returns The ID of the created workspace.
  */
-export const createWorkspace = async (name: string): Promise<string> => {
+export const createWorkspace = async (
+  name: string,
+  icon?: string
+): Promise<string> => {
   const id = generateId();
   await db.workspaces.add({
     id,
     name,
+    icon,
     createdAt: now(),
     deleted: false,
+    updatedAt: now(),
   });
   return id;
 };
@@ -24,9 +29,12 @@ export const createWorkspace = async (name: string): Promise<string> => {
  */
 export const updateWorkspace = async (
   id: string,
-  updates: Partial<Omit<Workspace, "id" | "createdAt">>
+  updates: Partial<Pick<Workspace, "name" | "icon">>
 ): Promise<void> => {
-  await db.workspaces.update(id, updates);
+  await db.workspaces.update(id, {
+    ...updates,
+    updatedAt: now(),
+  });
 };
 
 /**
