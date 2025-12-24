@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MoreVertical, Pencil, Trash2, Calendar, FileText } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { Workspace } from "@/lib/dexie/db";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -59,79 +60,87 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
 
   return (
     <>
-      <Card className="group relative overflow-hidden transition-all hover:shadow-md">
-        <CardHeader className="pb-3">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-xl">
-                {isEmoji ? (
-                  workspace.icon
-                ) : (
-                  <Icon
-                    name={(workspace.icon as IconName) || "ghost"}
-                    className="h-5 w-5"
-                  />
-                )}
+      <Link
+        href={`/${workspace.id}`}
+        className="block group relative overflow-hidden transition-all hover:shadow-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl">
+        <Card className="h-full border-0 shadow-none">
+          <CardHeader className="pb-3">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-xl">
+                  {isEmoji ? (
+                    workspace.icon
+                  ) : (
+                    <Icon
+                      name={(workspace.icon as IconName) || "ghost"}
+                      className="h-5 w-5"
+                    />
+                  )}
+                </div>
+                <div>
+                  <CardTitle className="line-clamp-1 text-base font-semibold">
+                    {workspace.name}
+                  </CardTitle>
+                  <CardDescription className="text-xs">
+                    Updated{" "}
+                    {formatDistanceToNow(workspace.updatedAt, {
+                      addSuffix: true,
+                    })}
+                  </CardDescription>
+                </div>
               </div>
-              <div>
-                <CardTitle className="line-clamp-1 text-base font-semibold">
-                  {workspace.name}
-                </CardTitle>
-                <CardDescription className="text-xs">
-                  Updated{" "}
-                  {formatDistanceToNow(workspace.updatedAt, {
-                    addSuffix: true,
+              <div onClick={(e) => e.preventDefault()}>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <MoreVertical className="h-4 w-4" />
+                      <span className="sr-only">Open menu</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => setShowEditDialog(true)}>
+                      <Pencil className="mr-2 h-4 w-4" />
+                      Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      className="text-destructive focus:text-destructive"
+                      onClick={() => setShowDeleteAlert(true)}>
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <FileText className="h-3.5 w-3.5" />
+                <span>{pageCount ?? 0} pages</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Calendar className="h-3.5 w-3.5" />
+                <span>
+                  Created{" "}
+                  {new Date(workspace.createdAt).toLocaleDateString(undefined, {
+                    month: "short",
+                    year: "numeric",
                   })}
-                </CardDescription>
+                </span>
               </div>
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreVertical className="h-4 w-4" />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setShowEditDialog(true)}>
-                  <Pencil className="mr-2 h-4 w-4" />
-                  Edit
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="text-destructive focus:text-destructive"
-                  onClick={() => setShowDeleteAlert(true)}>
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <FileText className="h-3.5 w-3.5" />
-              <span>{pageCount ?? 0} pages</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Calendar className="h-3.5 w-3.5" />
-              <span>
-                Created{" "}
-                {new Date(workspace.createdAt).toLocaleDateString(undefined, {
-                  month: "short",
-                  year: "numeric",
-                })}
-              </span>
-            </div>
-          </div>
-        </CardContent>
-        <CardFooter className="pt-0">
-          <Button variant="secondary" className="w-full justify-start text-xs">
-            Open Workspace
-          </Button>
-        </CardFooter>
-      </Card>
+          </CardContent>
+          <CardFooter className="pt-0">
+            <Button
+              variant="secondary"
+              className="w-full justify-start text-xs pointer-events-none">
+              Open Workspace
+            </Button>
+          </CardFooter>
+        </Card>
+      </Link>
 
       <EditWorkspaceDialog
         workspace={workspace}

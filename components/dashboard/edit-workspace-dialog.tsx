@@ -97,6 +97,7 @@ export function EditWorkspaceDialog({
               <Field>
                 <FieldLabel htmlFor="edit-icon">Icon</FieldLabel>
                 <IconPicker
+                  modal
                   value={field.state.value as IconName}
                   onValueChange={(val) => field.handleChange(val)}
                 />

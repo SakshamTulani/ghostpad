@@ -15,8 +15,6 @@ export const createPage = async (params: {
 }): Promise<string> => {
   const id = generateId();
   const doc = new Y.Doc();
-  // Initialize default content if needed, e.g. empty paragraph
-  doc.getText("content").insert(0, "");
   const newPage: Page = {
     id,
     title: params.title,

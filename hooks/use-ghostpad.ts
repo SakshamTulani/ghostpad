@@ -20,6 +20,7 @@ import {
   getPageCountByWorkspace,
 } from "@/lib/dexie/helpers/page";
 import type { Page, Workspace } from "@/lib/dexie/db";
+import { useMemo } from "react";
 
 // --- Workspace Hooks ---
 

@@ -1,6 +1,9 @@
 "use client";
 
+import type { Page } from "@/lib/dexie/db";
+import { useDocument } from "dexie-react-hooks";
 import dynamic from "next/dynamic";
+import React from "react";
 
 const Editor = dynamic(() => import("./editor"), {
   ssr: false,
@@ -13,4 +16,13 @@ const Editor = dynamic(() => import("./editor"), {
   ),
 });
 
-export default Editor;
+const EditorWithProvider = ({ page }: { page: Page }) => {
+  const provider = useDocument(page.content);
+  if (!provider || !provider.doc) {
+    return <div>Loading...</div>;
+  }
+
+  return <Editor provider={provider} doc={provider.doc} />;
+};
+
+export default EditorWithProvider;
