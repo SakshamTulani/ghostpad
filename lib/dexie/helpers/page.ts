@@ -14,8 +14,7 @@ export const createPage = async (params: {
   icon?: string;
 }): Promise<string> => {
   const id = generateId();
-  const doc = new Y.Doc();
-  const newPage: Page = {
+  await db.pages.add({
     id,
     title: params.title,
     workspaceId: params.workspaceId,
@@ -23,10 +22,8 @@ export const createPage = async (params: {
     icon: params.icon,
     createdAt: now(),
     updatedAt: now(),
-    content: doc,
     deleted: false,
-  };
-  await db.pages.add(newPage);
+  });
   return id;
 };
 

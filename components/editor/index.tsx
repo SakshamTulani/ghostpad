@@ -1,9 +1,9 @@
 "use client";
-
-import type { Page } from "@/lib/dexie/db";
-import { useDocument } from "dexie-react-hooks";
+import { db } from "@/lib/dexie/db";
+import { useDocument, useLiveQuery } from "dexie-react-hooks";
 import dynamic from "next/dynamic";
 import React from "react";
+import type { Doc } from "yjs";
 
 const Editor = dynamic(() => import("./editor"), {
   ssr: false,
@@ -16,13 +16,18 @@ const Editor = dynamic(() => import("./editor"), {
   ),
 });
 
-const EditorWithProvider = ({ page }: { page: Page }) => {
-  const provider = useDocument(page.content);
-  if (!provider || !provider.doc) {
-    return <div>Loading...</div>;
-  }
-
-  return <Editor provider={provider} doc={provider.doc} />;
+const EditorWrapper = ({ pageId }: { pageId: string }) => {
+  const page = useLiveQuery(() => db.pages.get(pageId), [pageId]);
+  const doc = page?.content;
+  if (!doc) return null;
+  return <MemoisedEditorWithProvider doc={doc} />;
 };
 
-export default EditorWithProvider;
+const EditorWithProvider = ({ doc }: { doc: Doc }) => {
+  const provider = useDocument(doc);
+  return provider ? <Editor doc={doc} provider={provider} /> : null;
+};
+const MemoisedEditorWithProvider = React.memo(EditorWithProvider);
+const MemoisedEditorWrapper = React.memo(EditorWrapper);
+
+export default MemoisedEditorWrapper;

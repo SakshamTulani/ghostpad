@@ -30,22 +30,15 @@ import { Badge } from "../ui/badge";
 import { useTheme } from "next-themes";
 import { type DexieYProvider } from "y-dexie";
 import * as Y from "yjs";
+import React from "react";
+import { useDocument } from "dexie-react-hooks";
 
-export default function Editor({
-  provider,
-  doc,
-  user = {
-    name: "anonymous",
-    color: "#006666",
-  },
-}: {
-  provider: DexieYProvider;
-  doc: Y.Doc;
-  user?: {
-    name: string;
-    color: string;
-  };
-}) {
+const user = {
+  name: "anonymous",
+  color: "#006666",
+};
+
+function Editor({ provider, doc }: { provider?: DexieYProvider; doc: Y.Doc }) {
   const editor = useCreateBlockNote({
     collaboration: {
       provider: provider,
@@ -97,3 +90,5 @@ export default function Editor({
     />
   );
 }
+
+export default React.memo(Editor);
