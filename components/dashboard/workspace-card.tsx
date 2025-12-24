@@ -62,8 +62,8 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
     <>
       <Link
         href={`/${workspace.id}`}
-        className="block group relative overflow-hidden transition-all hover:shadow-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl">
-        <Card className="h-full border-0 shadow-none">
+        className="block group relative focus-visible:outline-none rounded-2xl">
+        <Card className="h-full border ring-0 shadow-sm transition-all duration-200 group-hover:shadow-md group-hover:border-primary/20 group-focus-visible:ring-2 group-focus-visible:ring-ring group-focus-visible:ring-offset-2">
           <CardHeader className="pb-3">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">

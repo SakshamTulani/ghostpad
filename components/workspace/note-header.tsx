@@ -70,7 +70,7 @@ export function NoteHeader({
         value={page.title}
         onChange={handleTitleChange}
         placeholder="Untitled"
-        className="text-4xl font-bold bg-transparent border-none outline-none placeholder:text-muted-foreground/40 w-full"
+        className="text-2xl md:text-5xl font-bold bg-transparent border-none outline-none placeholder:text-muted-foreground/40 w-full"
       />
     </div>
   );

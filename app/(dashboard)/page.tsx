@@ -40,7 +40,7 @@ export default function DashboardPage() {
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="h-40 rounded-xl border bg-card/50 shadow-sm"
+                  className="h-40 rounded-2xl border bg-card shadow-sm"
                 />
               ))}
             </div>
@@ -51,7 +51,7 @@ export default function DashboardPage() {
               ))}
             </div>
           ) : (
-            <div className="flex h-100 flex-col items-center justify-center gap-4 rounded-xl border border-dashed bg-card/50 p-8 text-center animate-in fade-in-50 zoom-in-95 duration-500">
+            <div className="flex h-100 flex-col items-center justify-center gap-4 rounded-2xl border border-dashed bg-card/50 p-8 text-center animate-in fade-in-50 zoom-in-95 duration-500">
               <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/5">
                 <Ghost className="h-10 w-10 text-primary/50" />
               </div>
