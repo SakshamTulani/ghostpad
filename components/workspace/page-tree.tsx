@@ -38,6 +38,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { PageTreeSkeleton } from "@/components/ui/skeletons";
 
 export function PageTree({ workspaceId }: { workspaceId: string }) {
   const { pages, isLoading, createPage } = useRootPages(workspaceId);
@@ -60,9 +61,7 @@ export function PageTree({ workspaceId }: { workspaceId: string }) {
     return (
       <SidebarGroup>
         <SidebarGroupLabel>Pages</SidebarGroupLabel>
-        <div className="px-4 py-2 text-xs text-muted-foreground">
-          Loading...
-        </div>
+        <PageTreeSkeleton />
       </SidebarGroup>
     );
   }

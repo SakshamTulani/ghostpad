@@ -4,16 +4,22 @@ import { useDocument, useLiveQuery } from "dexie-react-hooks";
 import dynamic from "next/dynamic";
 import React from "react";
 import type { Doc } from "yjs";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const EditorSkeleton = () => (
+  <div className="space-y-3 min-h-50 animate-in fade-in-50 duration-300">
+    <Skeleton className="h-4 w-full" />
+    <Skeleton className="h-4 w-11/12" />
+    <Skeleton className="h-4 w-4/5" />
+    <Skeleton className="h-4 w-full" />
+    <Skeleton className="h-4 w-3/4" />
+    <Skeleton className="h-4 w-5/6" />
+  </div>
+);
 
 const Editor = dynamic(() => import("./editor"), {
   ssr: false,
-  loading: () => (
-    <div className="flex items-center justify-center min-h-125">
-      <div className="animate-pulse text-muted-foreground">
-        Loading editor...
-      </div>
-    </div>
-  ),
+  loading: () => <EditorSkeleton />,
 });
 
 const EditorWrapper = ({ pageId }: { pageId: string }) => {
