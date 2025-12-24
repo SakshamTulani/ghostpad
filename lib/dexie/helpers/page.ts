@@ -1,6 +1,5 @@
 import { db, type Page } from "../db";
 import { generateId, now } from "./utils";
-import * as Y from "yjs";
 
 /**
  * Creates a new page within a workspace.
@@ -125,7 +124,11 @@ export const hardDeletePage = async (id: string): Promise<void> => {
  * @returns The Page object or undefined if not found.
  */
 export const getPage = async (id: string): Promise<Page | undefined> => {
-  return await db.pages.get(id);
+  return await db.pages
+    .where("id")
+    .equals(id)
+    .filter((p) => !p.deleted)
+    .first();
 };
 
 /**

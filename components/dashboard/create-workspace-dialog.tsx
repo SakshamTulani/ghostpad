@@ -18,15 +18,29 @@ import { useWorkspaces } from "@/hooks/use-ghostpad";
 import { IconPicker, IconName } from "@/components/ui/icon-picker";
 import { useForm } from "@tanstack/react-form";
 import { workspaceSchema } from "@/lib/schemas";
+import { WORKSPACE_DEFAULTS } from "@/lib/defaults";
 
-export function CreateWorkspaceDialog() {
-  const [open, setOpen] = useState(false);
+interface CreateWorkspaceDialogProps {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export function CreateWorkspaceDialog({
+  open: externalOpen,
+  onOpenChange: externalOnOpenChange,
+}: CreateWorkspaceDialogProps = {}) {
+  const [internalOpen, setInternalOpen] = useState(false);
   const { createWorkspace } = useWorkspaces();
+
+  // Use external state if provided, otherwise internal
+  const isControlled = externalOpen !== undefined;
+  const open = isControlled ? externalOpen : internalOpen;
+  const setOpen = isControlled ? externalOnOpenChange! : setInternalOpen;
 
   const form = useForm({
     defaultValues: {
       name: "",
-      icon: "ghost" as IconName,
+      icon: WORKSPACE_DEFAULTS.icon,
     },
     validators: {
       onChange: workspaceSchema,
@@ -40,12 +54,14 @@ export function CreateWorkspaceDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button size="sm">
-          <Plus className="mr-2 h-4 w-4" />
-          Create Workspace
-        </Button>
-      </DialogTrigger>
+      {!isControlled && (
+        <DialogTrigger asChild>
+          <Button size="sm">
+            <Plus className="mr-2 h-4 w-4" />
+            Create Workspace
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
           <DialogTitle>Create Workspace</DialogTitle>

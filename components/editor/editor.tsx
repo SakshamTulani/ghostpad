@@ -31,7 +31,6 @@ import { useTheme } from "next-themes";
 import { type DexieYProvider } from "y-dexie";
 import * as Y from "yjs";
 import React from "react";
-import { useDocument } from "dexie-react-hooks";
 
 const user = {
   name: "anonymous",

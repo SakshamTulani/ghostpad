@@ -10,7 +10,6 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -29,94 +28,89 @@ export function WorkspaceSwitcher({
   activeWorkspaceId: string;
 }) {
   const { isMobile } = useSidebar();
-  const { workspaces, createWorkspace } = useWorkspaces();
+  const { workspaces } = useWorkspaces();
   const router = useRouter();
-  const [open, setOpen] = React.useState(false);
-  // State for CreateWorkspaceDialog if we want to trigger it from here
-  // Note: CreateWorkspaceDialog has its own trigger, so we might need to wrap or adapt it.
-  // For now, let's assume we can navigate.
+  const [createDialogOpen, setCreateDialogOpen] = React.useState(false);
 
   const activeWorkspace = workspaces?.find((w) => w.id === activeWorkspaceId);
 
   return (
-    <SidebarMenu>
-      <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                {activeWorkspace?.icon ? (
-                  <Icon
-                    name={activeWorkspace.icon as IconName}
-                    className="size-4"
-                  />
-                ) : (
-                  activeWorkspace?.name?.charAt(0) ?? "W"
-                )}
-              </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">
-                  {activeWorkspace?.name || "Select Workspace"}
-                </span>
-                <span className="truncate text-xs">
-                  {/* Could show role or something else here */}
-                  Workspace
-                </span>
-              </div>
-              <ChevronsUpDown className="ml-auto" />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-            align="start"
-            side={isMobile ? "bottom" : "right"}
-            sideOffset={4}>
-            <DropdownMenuLabel className="text-xs text-muted-foreground">
-              Workspaces
-            </DropdownMenuLabel>
-            {workspaces?.map((workspace) => (
-              <DropdownMenuItem
-                key={workspace.id}
-                onClick={() => router.push(`/${workspace.id}`)}
-                className="gap-2 p-2">
-                <div className="flex size-6 items-center justify-center rounded-sm border">
-                  {workspace.icon ? (
+    <>
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton
+                size="lg"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  {activeWorkspace?.icon ? (
                     <Icon
-                      name={workspace.icon as IconName}
+                      name={activeWorkspace.icon as IconName}
                       className="size-4"
                     />
                   ) : (
-                    workspace.name.charAt(0)
+                    activeWorkspace?.name?.charAt(0) ?? "W"
                   )}
                 </div>
-                {workspace.name}
-                {workspace.id === activeWorkspaceId && (
-                  <Check className="ml-auto h-4 w-4" />
-                )}
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">
+                    {activeWorkspace?.name || "Select Workspace"}
+                  </span>
+                  <span className="truncate text-xs">Workspace</span>
+                </div>
+                <ChevronsUpDown className="ml-auto" />
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+              align="start"
+              side={isMobile ? "bottom" : "right"}
+              sideOffset={4}>
+              <DropdownMenuLabel className="text-xs text-muted-foreground">
+                Workspaces
+              </DropdownMenuLabel>
+              {workspaces?.map((workspace) => (
+                <DropdownMenuItem
+                  key={workspace.id}
+                  onClick={() => router.push(`/${workspace.id}`)}
+                  className="gap-2 p-2">
+                  <div className="flex size-6 items-center justify-center rounded-sm border">
+                    {workspace.icon ? (
+                      <Icon
+                        name={workspace.icon as IconName}
+                        className="size-4"
+                      />
+                    ) : (
+                      workspace.name.charAt(0)
+                    )}
+                  </div>
+                  {workspace.name}
+                  {workspace.id === activeWorkspaceId && (
+                    <Check className="ml-auto h-4 w-4" />
+                  )}
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="gap-2 p-2"
+                onClick={() => setCreateDialogOpen(true)}>
+                <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                  <Plus className="size-4" />
+                </div>
+                <div className="font-medium text-muted-foreground">
+                  Add workspace
+                </div>
               </DropdownMenuItem>
-            ))}
-            <DropdownMenuSeparator />
-            {/* 
-                TODO: Create Workspace trigger. 
-                The CreateWorkspaceDialog usually renders a button. 
-                We might need to refactor it to accept 'open' state or use a different trigger.
-                For now, linking back to dashboard creates a flow to add workspace.
-             */}
-            <DropdownMenuItem
-              className="gap-2 p-2"
-              onClick={() => router.push("/")}>
-              <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                <Plus className="size-4" />
-              </div>
-              <div className="font-medium text-muted-foreground">
-                Add workspace
-              </div>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </SidebarMenuItem>
-    </SidebarMenu>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </SidebarMenuItem>
+      </SidebarMenu>
+
+      <CreateWorkspaceDialog
+        open={createDialogOpen}
+        onOpenChange={setCreateDialogOpen}
+      />
+    </>
   );
 }

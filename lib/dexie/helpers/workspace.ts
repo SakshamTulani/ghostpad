@@ -114,5 +114,9 @@ export const getAllWorkspaces = async (): Promise<Workspace[]> => {
 export const getWorkspace = async (
   id: string
 ): Promise<Workspace | undefined> => {
-  return await db.workspaces.get(id);
+  return await db.workspaces
+    .where("id")
+    .equals(id)
+    .filter((w) => !w.deleted)
+    .first();
 };

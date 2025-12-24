@@ -30,7 +30,7 @@ export default function PageView() {
   }
 
   return (
-    <div className="flex flex-1 flex-col max-w-5xl mx-auto w-full py-12 px-8 min-h-screen bg-background">
+    <div className="flex flex-1 flex-col max-w-5xl mx-auto w-full py-6 px-4 md:py-12 md:px-8 min-h-screen bg-background">
       <NoteHeader
         page={page}
         onIconChange={handleIconChange}

@@ -2,11 +2,16 @@
 
 import { useRootPages } from "@/hooks/use-ghostpad";
 import { Button } from "@/components/ui/button";
-import { FileText, Plus } from "lucide-react";
+import { FileText, Plus, MousePointerClick } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { PAGE_DEFAULTS } from "@/lib/defaults";
 
-export function EmptyState({ workspaceId }: { workspaceId: string }) {
+interface EmptyStateProps {
+  workspaceId: string;
+  hasPages?: boolean;
+}
+
+export function EmptyState({ workspaceId, hasPages = false }: EmptyStateProps) {
   const { createPage } = useRootPages(workspaceId);
   const router = useRouter();
 
@@ -14,7 +19,7 @@ export function EmptyState({ workspaceId }: { workspaceId: string }) {
     try {
       const newPageId = await createPage({
         workspaceId,
-        title: "Getting Started",
+        ...PAGE_DEFAULTS,
         parentId: workspaceId,
       });
       router.push(`/${workspaceId}/${newPageId}`);
@@ -23,6 +28,29 @@ export function EmptyState({ workspaceId }: { workspaceId: string }) {
     }
   };
 
+  // Pages exist but none is selected
+  if (hasPages) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center p-8 text-center animate-in fade-in-50 duration-500">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted shadow-sm">
+          <MousePointerClick className="h-10 w-10 text-muted-foreground" />
+        </div>
+        <h2 className="mt-6 text-xl font-semibold">Select a page</h2>
+        <p className="mt-2 text-center text-sm text-muted-foreground max-w-sm">
+          Choose a page from the sidebar to start editing, or create a new one.
+        </p>
+        <Button
+          onClick={handleCreateFirstPage}
+          className="mt-8"
+          variant="outline">
+          <Plus className="mr-2 h-4 w-4" />
+          Create new page
+        </Button>
+      </div>
+    );
+  }
+
+  // No pages exist - welcome state
   return (
     <div className="flex h-full flex-col items-center justify-center p-8 text-center animate-in fade-in-50 duration-500">
       <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted shadow-sm">

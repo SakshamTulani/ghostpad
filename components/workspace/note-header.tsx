@@ -2,6 +2,9 @@
 
 import { IconPicker, Icon, IconName } from "@/components/ui/icon-picker";
 import { Page } from "@/lib/dexie/db";
+import { Input } from "../ui/input";
+import { Smile } from "lucide-react";
+import React from "react";
 
 interface NoteHeaderProps {
   page: Page;
@@ -14,15 +17,34 @@ export function NoteHeader({
   onIconChange,
   onTitleChange,
 }: NoteHeaderProps) {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const cursorPosRef = React.useRef<number | null>(null);
+
+  // Preserve cursor position after re-render
+  React.useEffect(() => {
+    if (inputRef.current && cursorPosRef.current !== null) {
+      inputRef.current.setSelectionRange(
+        cursorPosRef.current,
+        cursorPosRef.current
+      );
+      cursorPosRef.current = null;
+    }
+  });
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    cursorPosRef.current = e.target.selectionStart;
+    onTitleChange(e);
+  };
+
   return (
     <div className="group relative mb-8 pl-12 group-hover/icon:opacity-100">
-      <div className="absolute left-0 top-1 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="absolute left-0 top-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
         <IconPicker value={page.icon as IconName} onValueChange={onIconChange}>
           <button className="flex items-center justify-center h-8 w-8 rounded hover:bg-muted transition text-muted-foreground">
             {page.icon ? (
               <Icon name={page.icon as IconName} />
             ) : (
-              <span className="text-xs">Icon</span>
+              <Smile className="h-5 w-5" />
             )}
           </button>
         </IconPicker>
@@ -39,9 +61,10 @@ export function NoteHeader({
         </div>
       )}
 
-      <input
+      <Input
+        ref={inputRef}
         value={page.title}
-        onChange={onTitleChange}
+        onChange={handleTitleChange}
         placeholder="Untitled"
         className="text-4xl font-bold bg-transparent border-none outline-none placeholder:text-muted-foreground/40 w-full"
       />

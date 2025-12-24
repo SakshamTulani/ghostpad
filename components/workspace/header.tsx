@@ -3,8 +3,9 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { User, LogOut } from "lucide-react";
+import { User, LogOut, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +21,12 @@ export function WorkspaceHeader() {
       <div className="flex items-center gap-2">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mr-2 h-4 my-auto" />
-        {/* Future breadcrumbs could go here */}
+        <Button variant="ghost" size="icon-sm" asChild title="Go to Dashboard">
+          <Link href="/">
+            <Home className="h-4 w-4" />
+            <span className="sr-only">Go to Dashboard</span>
+          </Link>
+        </Button>
       </div>
 
       <div className="flex items-center gap-2">
