@@ -118,7 +118,9 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-1">
                 <FileText className="h-3.5 w-3.5" />
-                <span>{pageCount ?? 0} pages</span>
+                <span>
+                  {pageCount ?? 0} page{pageCount === 1 ? "" : "s"}
+                </span>
               </div>
               <div className="flex items-center gap-1">
                 <Calendar className="h-3.5 w-3.5" />

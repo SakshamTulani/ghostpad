@@ -110,6 +110,9 @@ export function WorkspaceSwitcher({
       <CreateWorkspaceDialog
         open={createDialogOpen}
         onOpenChange={setCreateDialogOpen}
+        onWorkspaceCreated={(workspaceId) => {
+          router.push(`/${workspaceId}`);
+        }}
       />
     </>
   );

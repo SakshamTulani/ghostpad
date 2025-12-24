@@ -26,7 +26,6 @@ import { PanelLeftIcon } from "lucide-react";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-const SIDEBAR_WIDTH = "16rem";
 const SIDEBAR_WIDTH_MOBILE = "18rem";
 const SIDEBAR_WIDTH_ICON = "3rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
@@ -43,6 +42,8 @@ type SidebarContextProps = {
   toggleSidebar: () => void;
   sidebarWidth: number;
   setSidebarWidth: (width: number) => void;
+  isResizing: boolean;
+  setIsResizing: (resizing: boolean) => void;
 };
 
 const SidebarContext = React.createContext<SidebarContextProps | null>(null);
@@ -71,6 +72,7 @@ function SidebarProvider({
 }) {
   const isMobile = useIsMobile();
   const [openMobile, setOpenMobile] = React.useState(false);
+  const [isResizing, setIsResizing] = React.useState(false);
   const [sidebarWidth, setSidebarWidth] = React.useState(256); // 16rem = 256px
 
   // This is the internal state of the sidebar.
@@ -128,6 +130,8 @@ function SidebarProvider({
       toggleSidebar,
       sidebarWidth,
       setSidebarWidth,
+      isResizing,
+      setIsResizing,
     }),
     [
       state,
@@ -138,6 +142,7 @@ function SidebarProvider({
       setOpenMobile,
       toggleSidebar,
       sidebarWidth,
+      isResizing,
     ]
   );
 
@@ -175,7 +180,8 @@ function Sidebar({
   variant?: "sidebar" | "floating" | "inset";
   collapsible?: "offcanvas" | "icon" | "none";
 }) {
-  const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
+  const { isMobile, state, openMobile, setOpenMobile, isResizing } =
+    useSidebar();
 
   if (collapsible === "none") {
     return (
@@ -227,7 +233,8 @@ function Sidebar({
       <div
         data-slot="sidebar-gap"
         className={cn(
-          "transition-[width] duration-200 ease-linear relative w-(--sidebar-width) bg-transparent",
+          "relative w-(--sidebar-width) bg-transparent",
+          !isResizing && "transition-[width] duration-200 ease-linear",
           "group-data-[collapsible=offcanvas]:w-0",
           "group-data-[side=right]:rotate-180",
           variant === "floating" || variant === "inset"
@@ -238,7 +245,9 @@ function Sidebar({
       <div
         data-slot="sidebar-container"
         className={cn(
-          "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex",
+          "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) md:flex",
+          !isResizing &&
+            "transition-[left,right,width] duration-200 ease-linear",
           side === "left"
             ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
             : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
@@ -286,8 +295,9 @@ function SidebarTrigger({
 }
 
 function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
-  const { toggleSidebar, sidebarWidth, setSidebarWidth, state } = useSidebar();
-  const isResizing = React.useRef(false);
+  const { toggleSidebar, sidebarWidth, setSidebarWidth, state, setIsResizing } =
+    useSidebar();
+  const isResizingRef = React.useRef(false);
   const startX = React.useRef(0);
   const startWidth = React.useRef(0);
 
@@ -298,19 +308,20 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
         toggleSidebar();
         return;
       }
-      isResizing.current = true;
+      isResizingRef.current = true;
+      setIsResizing(true);
       startX.current = e.clientX;
       startWidth.current = sidebarWidth;
       document.body.style.cursor = "col-resize";
       document.body.style.userSelect = "none";
       e.preventDefault();
     },
-    [sidebarWidth, state, toggleSidebar]
+    [sidebarWidth, state, toggleSidebar, setIsResizing]
   );
 
   React.useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isResizing.current) return;
+      if (!isResizingRef.current) return;
       const delta = e.clientX - startX.current;
       const newWidth = Math.min(
         SIDEBAR_MAX_WIDTH,
@@ -320,8 +331,9 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
     };
 
     const handleMouseUp = () => {
-      if (isResizing.current) {
-        isResizing.current = false;
+      if (isResizingRef.current) {
+        isResizingRef.current = false;
+        setIsResizing(false);
         document.body.style.cursor = "";
         document.body.style.userSelect = "";
       }
@@ -333,7 +345,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [setSidebarWidth]);
+  }, [setSidebarWidth, setIsResizing]);
 
   return (
     <button
@@ -629,7 +641,7 @@ function SidebarMenuBadge({
       data-slot="sidebar-menu-badge"
       data-sidebar="menu-badge"
       className={cn(
-        "text-sidebar-foreground peer-hover/menu-button:text-sidebar-accent-foreground peer-data-active/menu-button:text-sidebar-accent-foreground pointer-events-none absolute right-1 flex h-5 min-w-5 rounded-md px-1 text-xs font-medium peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 flex items-center justify-center tabular-nums select-none group-data-[collapsible=icon]:hidden",
+        "text-sidebar-foreground peer-hover/menu-button:text-sidebar-accent-foreground peer-data-active/menu-button:text-sidebar-accent-foreground pointer-events-none absolute right-1 flex h-5 min-w-5 rounded-md px-1 text-xs font-medium peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1  items-center justify-center tabular-nums select-none group-data-[collapsible=icon]:hidden",
         className
       )}
       {...props}

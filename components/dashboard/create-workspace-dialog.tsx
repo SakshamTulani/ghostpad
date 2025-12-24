@@ -23,11 +23,13 @@ import { WORKSPACE_DEFAULTS } from "@/lib/defaults";
 interface CreateWorkspaceDialogProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  onWorkspaceCreated?: (workspaceId: string) => void;
 }
 
 export function CreateWorkspaceDialog({
   open: externalOpen,
   onOpenChange: externalOnOpenChange,
+  onWorkspaceCreated,
 }: CreateWorkspaceDialogProps = {}) {
   const [internalOpen, setInternalOpen] = useState(false);
   const { createWorkspace } = useWorkspaces();
@@ -46,9 +48,10 @@ export function CreateWorkspaceDialog({
       onChange: workspaceSchema,
     },
     onSubmit: async ({ value }) => {
-      await createWorkspace(value.name, value.icon);
+      const workspaceId = await createWorkspace(value.name, value.icon);
       setOpen(false);
       form.reset();
+      onWorkspaceCreated?.(workspaceId);
     },
   });
 
