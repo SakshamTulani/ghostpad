@@ -32,7 +32,7 @@ export function WorkspaceHeader() {
       <div className="flex items-center gap-2">
         <ThemeToggle />
 
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">
               <User className="h-5 w-5" />
@@ -50,7 +50,7 @@ export function WorkspaceHeader() {
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </div>
     </header>
   );
