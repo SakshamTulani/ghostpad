@@ -14,6 +14,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
@@ -111,7 +112,7 @@ function PageItem({
   const pathname = usePathname();
   const { pages: childPages, createPage: createChild } = useChildPages(page.id);
   const { softDeletePage } = usePage(page.id);
-
+  const { isMobile, setOpenMobile } = useSidebar();
   // Basic isExpanded simply based on if it has children for now
   // Real notion-like tree needs state persistence
   // We can use Collapsible 'open' state
@@ -147,7 +148,12 @@ function PageItem({
       <SidebarMenuItem>
         <SidebarMenuButton asChild isActive={isActive} className="group/item">
           <div
-            onClick={() => router.push(`/${workspaceId}/${page.id}`)}
+            onClick={() => {
+              router.push(`/${workspaceId}/${page.id}`);
+              if (isMobile) {
+                setOpenMobile(false);
+              }
+            }}
             className="flex w-full items-center gap-2 cursor-pointer"
             style={{ paddingLeft: `${12 * depth}px` }}>
             {/* Show chevron if there are children usually, but Notion shows it always or on hover used for nesting */}
