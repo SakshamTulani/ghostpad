@@ -55,6 +55,7 @@ export class GhostpadDatabase extends Dexie {
     this.cloud.configure({
       databaseUrl: process.env.NEXT_PUBLIC_DEXIE_CLOUD_DB_URL || "",
       requireAuth: false,
+      customLoginGui: true,
     });
   }
 }
