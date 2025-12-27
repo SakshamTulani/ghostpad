@@ -102,11 +102,11 @@ export function CreateWorkspaceDialog({
             children={(field) => (
               <Field>
                 <FieldLabel htmlFor="icon">Icon</FieldLabel>
-                <IconPicker
+                {/* <IconPicker
                   modal
                   value={field.state.value as IconName}
                   onValueChange={(val) => field.handleChange(val)}
-                />
+                /> */}
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
