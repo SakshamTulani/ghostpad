@@ -41,7 +41,7 @@ const EmojiPicker = React.forwardRef<HTMLButtonElement, EmojiPickerProps>(
     const pickerTheme = resolvedTheme === "dark" ? Theme.DARK : Theme.LIGHT;
 
     return (
-      <Popover open={controlledOpen} onOpenChange={setControlledOpen}>
+      <Popover modal open={controlledOpen} onOpenChange={setControlledOpen}>
         <PopoverTrigger ref={ref} asChild>
           {children}
         </PopoverTrigger>
