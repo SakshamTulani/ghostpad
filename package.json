@@ -37,7 +37,7 @@
     "zod": "^4.2.1"
   },
   "devDependencies": {
-    "@serwist/turbopack": "^9.4.1",
+    "@serwist/turbopack": "^9.4.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -45,7 +45,7 @@
     "esbuild-wasm": "^0.27.2",
     "eslint": "^9",
     "eslint-config-next": "^16.1.0",
-    "serwist": "^9.4.1",
+    "serwist": "^9.4.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
