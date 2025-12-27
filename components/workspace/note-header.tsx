@@ -1,6 +1,6 @@
 "use client";
 
-// import { IconPicker, Icon, IconName } from "@/components/ui/icon-picker";
+import { EmojiPicker, Emoji } from "@/components/ui/icon-picker";
 import { Page } from "@/lib/dexie/db";
 import { Input } from "../ui/input";
 import { Smile } from "lucide-react";
@@ -40,28 +40,20 @@ export function NoteHeader({
     <div className="group relative mb-8 pl-12 group-hover/icon:opacity-100">
       {!page.icon && (
         <div className="absolute left-0 top-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-          {/* <IconPicker
-            value={page.icon as IconName}
-            onValueChange={onIconChange}>
+          <EmojiPicker value={page.icon} onValueChange={onIconChange}>
             <button className="flex items-center justify-center h-8 w-8 rounded hover:bg-muted transition text-muted-foreground">
-              {page.icon ? (
-                <Icon name={page.icon as IconName} />
-              ) : (
-                <Smile className="h-5 w-5" />
-              )}
+              <Smile className="h-5 w-5" />
             </button>
-          </IconPicker> */}
+          </EmojiPicker>
         </div>
       )}
       {page.icon && (
         <div className="text-5xl mb-4 -ml-1">
-          {/* <IconPicker
-            value={page.icon as IconName}
-            onValueChange={onIconChange}>
+          <EmojiPicker value={page.icon} onValueChange={onIconChange}>
             <span className="cursor-pointer hover:opacity-80 transition inline-flex max-content">
-              <Icon name={page.icon as IconName} size={48} />
+              <Emoji emoji={page.icon} size={48} />
             </span>
-          </IconPicker> */}
+          </EmojiPicker>
         </div>
       )}
 

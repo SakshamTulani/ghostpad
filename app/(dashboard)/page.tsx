@@ -1,7 +1,7 @@
 "use client";
 
 import { useWorkspaces } from "@/hooks/use-ghostpad";
-import { CreateWorkspaceDialog } from "@/components/dashboard/create-workspace-dialog";
+import { WorkspaceDialog } from "@/components/dashboard/workspace-dialog";
 import { WorkspaceCard } from "@/components/dashboard/workspace-card";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Ghost } from "lucide-react";
@@ -32,7 +32,7 @@ export default function DashboardPage() {
                 Manage your knowledge bases and notes.
               </p>
             </div>
-            <CreateWorkspaceDialog />
+            <WorkspaceDialog showTrigger />
           </div>
 
           {isLoading ? (
@@ -62,7 +62,7 @@ export default function DashboardPage() {
                   documents.
                 </p>
               </div>
-              <CreateWorkspaceDialog />
+              <WorkspaceDialog showTrigger />
             </div>
           )}
         </div>

@@ -19,8 +19,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useWorkspaces } from "@/hooks/use-ghostpad";
-import { CreateWorkspaceDialog } from "@/components/dashboard/create-workspace-dialog";
-import { Icon, IconName } from "@/components/ui/icon-picker";
+import { WorkspaceDialog } from "@/components/dashboard/workspace-dialog";
+import { Emoji } from "@/components/ui/icon-picker";
 
 export function WorkspaceSwitcher({
   activeWorkspaceId,
@@ -45,10 +45,7 @@ export function WorkspaceSwitcher({
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   {activeWorkspace?.icon ? (
-                    <Icon
-                      name={activeWorkspace.icon as IconName}
-                      className="size-4"
-                    />
+                    <Emoji emoji={activeWorkspace.icon} className="size-4" />
                   ) : (
                     activeWorkspace?.name?.charAt(0) ?? "W"
                   )}
@@ -77,10 +74,7 @@ export function WorkspaceSwitcher({
                   className="gap-2 p-2">
                   <div className="flex size-6 items-center justify-center rounded-sm border">
                     {workspace.icon ? (
-                      <Icon
-                        name={workspace.icon as IconName}
-                        className="size-4"
-                      />
+                      <Emoji emoji={workspace.icon} className="size-4" />
                     ) : (
                       workspace.name.charAt(0)
                     )}
@@ -107,10 +101,10 @@ export function WorkspaceSwitcher({
         </SidebarMenuItem>
       </SidebarMenu>
 
-      <CreateWorkspaceDialog
+      <WorkspaceDialog
         open={createDialogOpen}
         onOpenChange={setCreateDialogOpen}
-        onWorkspaceCreated={(workspaceId) => {
+        onSuccess={(workspaceId) => {
           router.push(`/${workspaceId}`);
         }}
       />

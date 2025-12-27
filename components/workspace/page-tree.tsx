@@ -21,7 +21,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Icon, IconName } from "@/components/ui/icon-picker";
+import { Emoji } from "@/components/ui/icon-picker";
 import { useRootPages, useChildPages, usePage } from "@/hooks/use-ghostpad";
 import { useRouter, usePathname } from "next/navigation";
 import { Page } from "@/lib/dexie/db";
@@ -171,7 +171,7 @@ function PageItem({
 
             <div className="flex items-center justify-center h-5 w-5">
               {page.icon ? (
-                <Icon name={page.icon as IconName} className="h-4 w-4" />
+                <Emoji emoji={page.icon} className="h-4 w-4" />
               ) : (
                 <Smile className="h-4 w-4 shrink-0 text-muted-foreground" />
               )}

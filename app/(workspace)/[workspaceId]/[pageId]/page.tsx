@@ -2,7 +2,6 @@
 
 import { usePage, useWorkspace } from "@/hooks/use-ghostpad";
 import { useParams } from "next/navigation";
-import { IconName } from "@/components/ui/icon-picker";
 import Editor from "@/components/editor";
 import { NoteHeader } from "@/components/workspace/note-header";
 import { PageSkeleton } from "@/components/ui/skeletons";
@@ -19,7 +18,7 @@ export default function PageView() {
     updatePage(pageId, { title: e.target.value });
   };
 
-  const handleIconChange = (icon: IconName) => {
+  const handleIconChange = (icon: string) => {
     updatePage(pageId, { icon });
   };
 
