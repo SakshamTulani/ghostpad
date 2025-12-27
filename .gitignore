@@ -51,4 +51,4 @@ dexie-cloud.json
 #serwist
 public/sw*
 public/swe-worker*
-certificates
+
