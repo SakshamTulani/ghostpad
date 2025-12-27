@@ -15,7 +15,7 @@ import {
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useWorkspaces } from "@/hooks/use-ghostpad";
-import { IconPicker, IconName } from "@/components/ui/icon-picker";
+// import { IconPicker, IconName } from "@/components/ui/icon-picker";
 import { useForm } from "@tanstack/react-form";
 import { workspaceSchema } from "@/lib/schemas";
 import { WORKSPACE_DEFAULTS } from "@/lib/defaults";

@@ -1,6 +1,6 @@
 "use client";
 
-import { IconPicker, Icon, IconName } from "@/components/ui/icon-picker";
+// import { IconPicker, Icon, IconName } from "@/components/ui/icon-picker";
 import { Page } from "@/lib/dexie/db";
 import { Input } from "../ui/input";
 import { Smile } from "lucide-react";
@@ -8,7 +8,7 @@ import React from "react";
 
 interface NoteHeaderProps {
   page: Page;
-  onIconChange: (icon: IconName) => void;
+  onIconChange: (icon: string) => void;
   onTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 

@@ -14,7 +14,7 @@ import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Workspace } from "@/lib/dexie/db";
 import { useWorkspace } from "@/hooks/use-ghostpad";
-import { IconPicker, IconName } from "@/components/ui/icon-picker";
+// import { IconPicker, IconName } from "@/components/ui/icon-picker";
 import { useForm } from "@tanstack/react-form";
 import { workspaceSchema } from "@/lib/schemas";
 
@@ -34,7 +34,7 @@ export function EditWorkspaceDialog({
   const form = useForm({
     defaultValues: {
       name: workspace.name,
-      icon: (workspace.icon as IconName) || "ghost",
+      icon: (workspace.icon as string) || "ghost",
     },
     validators: {
       onChange: workspaceSchema,
@@ -53,7 +53,7 @@ export function EditWorkspaceDialog({
     if (open) {
       form.reset({
         name: workspace.name,
-        icon: (workspace.icon as IconName) || "ghost",
+        icon: (workspace.icon as string) || "ghost",
       });
     }
   }, [open, workspace, form]);
