@@ -6,6 +6,7 @@ import { WorkspaceHeader } from "@/components/workspace/header";
 
 interface WorkspaceLayoutWrapperProps {
   children: React.ReactNode;
+  workspaceId: string;
 }
 
 /**
@@ -14,10 +15,11 @@ interface WorkspaceLayoutWrapperProps {
  */
 export function WorkspaceLayoutWrapper({
   children,
+  workspaceId,
 }: WorkspaceLayoutWrapperProps) {
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar workspaceId={workspaceId} />
       <SidebarInset>
         <WorkspaceHeader />
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>

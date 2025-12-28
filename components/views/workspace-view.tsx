@@ -13,7 +13,7 @@ interface WorkspaceViewProps {
  */
 export function WorkspaceView({ workspaceId }: WorkspaceViewProps) {
   return (
-    <WorkspaceLayoutWrapper>
+    <WorkspaceLayoutWrapper workspaceId={workspaceId}>
       <WorkspaceContent workspaceId={workspaceId} />
     </WorkspaceLayoutWrapper>
   );

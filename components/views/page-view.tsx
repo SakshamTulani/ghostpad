@@ -14,7 +14,7 @@ interface PageViewProps {
  */
 export function PageView({ workspaceId, pageId }: PageViewProps) {
   return (
-    <WorkspaceLayoutWrapper>
+    <WorkspaceLayoutWrapper workspaceId={workspaceId}>
       <PageContent workspaceId={workspaceId} pageId={pageId} />
     </WorkspaceLayoutWrapper>
   );
