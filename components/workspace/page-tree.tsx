@@ -14,6 +14,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
@@ -108,6 +109,7 @@ function PageItem({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { isMobile, setOpenMobile } = useSidebar();
   const { pages: childPages, createPage: createChild } = useChildPages(page.id);
   const { softDeletePage } = usePage(page.id);
 
@@ -131,6 +133,7 @@ function PageItem({
       });
       setIsOpen(true); // Auto expand
       router.push(`/app?workspace=${workspaceId}&page=${newPageId}`);
+      if (isMobile) setOpenMobile(false);
     } catch (err) {
       console.error("Failed to create child page", err);
     }
@@ -170,9 +173,10 @@ function PageItem({
         <SidebarMenuItem>
           <SidebarMenuButton asChild isActive={isActive} className="group/item">
             <div
-              onClick={() =>
-                router.push(`/app?workspace=${workspaceId}&page=${page.id}`)
-              }
+              onClick={() => {
+                router.push(`/app?workspace=${workspaceId}&page=${page.id}`);
+                if (isMobile) setOpenMobile(false);
+              }}
               className="flex w-full items-center gap-2 cursor-pointer"
               style={{ paddingLeft: `${12 * depth}px` }}>
               {/* Show chevron if there are children usually, but Notion shows it always or on hover used for nesting */}
@@ -211,7 +215,7 @@ function PageItem({
                   title="Add sub-page">
                   <Plus className="h-4 w-4" />
                 </button>
-                <DropdownMenu>
+                <DropdownMenu modal={false}>
                   <DropdownMenuTrigger asChild>
                     <button
                       className="flex items-center justify-center h-6 w-6 rounded hover:bg-sidebar-accent text-muted-foreground hover:text-foreground"
@@ -223,14 +227,19 @@ function PageItem({
                   <DropdownMenuContent
                     className="w-48"
                     side="right"
-                    align="start">
-                    <DropdownMenuItem onClick={handleCreateChild}>
+                    align="start"
+                    onClick={(e) => e.stopPropagation()}>
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCreateChild(e);
+                      }}>
                       <Plus className="mr-2 h-4 w-4 text-muted-foreground" />
                       <span>Add sub-page</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onSelect={(e) => {
-                        e.preventDefault();
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setIsDeleteDialogOpen(true);
                       }}
                       className="text-destructive focus:text-destructive">

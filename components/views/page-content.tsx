@@ -55,7 +55,7 @@ export function PageContent({ workspaceId, pageId }: PageContentProps) {
         onTitleChange={handleTitleChange}
       />
       <div className="pl-4">
-        <Editor pageId={pageId} />
+        <Editor key={pageId} pageId={pageId} />
       </div>
     </div>
   );
