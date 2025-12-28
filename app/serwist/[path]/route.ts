@@ -10,12 +10,9 @@ const revision =
 
 export const { dynamic, dynamicParams, revalidate, generateStaticParams, GET } =
   createSerwistRoute({
-    additionalPrecacheEntries: [
-      { url: "/", revision },
-      { url: "/[path]", revision },
-      { url: "/[path]/[path]", revision },
-    ],
+    additionalPrecacheEntries: [{ url: "/", revision }],
     swSrc: "app/sw.ts",
+
     // Copy relevant Next.js configuration (assetPrefix,
     // basePath, distDir) over if you've changed them.
     nextConfig: {},

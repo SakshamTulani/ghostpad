@@ -16,6 +16,17 @@ declare const self: ServiceWorkerGlobalScope;
 
 const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,
+  precacheOptions: {
+    // App Shell Pattern: serve cached "/" for ALL navigation requests
+    // This enables offline access to dynamic routes like /workspaceId/pageId
+    navigateFallback: "/",
+    // Don't use fallback for these patterns
+    navigateFallbackDenylist: [
+      /^\/api\//, // API routes
+      /^\/serwist\//, // Service worker routes
+      /\.[a-zA-Z0-9]+$/, // Files with extensions (assets)
+    ],
+  },
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: true,
