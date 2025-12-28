@@ -34,21 +34,13 @@ export function PwaStatus() {
       }
 
       try {
-        const registration = await navigator.serviceWorker.getRegistration();
+        // Check if this is a first visit (no version stored yet)
+        const lastSeenVersion = localStorage.getItem(SW_VERSION_KEY);
+        const isFirstVisit = !lastSeenVersion;
 
-        if (!registration) {
-          return;
-        }
-
-        // Get the active SW's script URL as a version identifier
-        const activeSW = registration.active;
-        const installingSW = registration.installing;
-        const waitingSW = registration.waiting;
-
-        // If there's an installing SW, show loading toast
-        if (installingSW) {
+        // If first visit, show loading toast immediately
+        if (isFirstVisit && !loadingToastId.current) {
           hasHandledThisSession.current = true;
-
           loadingToastId.current = toast.loading(
             "Preparing app for offline use...",
             {
@@ -56,32 +48,22 @@ export function PwaStatus() {
               duration: Infinity,
             }
           );
-
-          // Listen for state changes on the installing SW
-          installingSW.addEventListener("statechange", () => {
-            if (installingSW.state === "activated") {
-              const swVersion = installingSW.scriptURL;
-              localStorage.setItem(SW_VERSION_KEY, swVersion);
-              showSuccessToast();
-            }
-          });
-
-          return;
         }
 
-        // If there's a waiting SW, it means an update is available
-        if (waitingSW) {
-          // Optional: You could show an "update available" toast here
-          return;
-        }
+        // Wait for the service worker to be ready
+        const registration = await navigator.serviceWorker.ready;
+        const activeSW = registration.active;
 
-        // If there's an active SW, check if we've shown toast for this version
         if (activeSW) {
           const swVersion = activeSW.scriptURL;
-          const lastSeenVersion = localStorage.getItem(SW_VERSION_KEY);
 
-          // Only show toast if this is a new version or first time
-          if (lastSeenVersion !== swVersion) {
+          // First visit: we showed loading toast, now show success
+          if (isFirstVisit) {
+            localStorage.setItem(SW_VERSION_KEY, swVersion);
+            showSuccessToast();
+          }
+          // Returning visit with new SW version (update)
+          else if (lastSeenVersion !== swVersion) {
             hasHandledThisSession.current = true;
             localStorage.setItem(SW_VERSION_KEY, swVersion);
             showSuccessToast();
@@ -89,17 +71,22 @@ export function PwaStatus() {
         }
       } catch (error) {
         console.error("Error handling service worker status:", error);
+        // Dismiss loading toast on error
+        if (loadingToastId.current) {
+          toast.dismiss(loadingToastId.current);
+          loadingToastId.current = null;
+        }
       }
     };
 
     // Initial check
     handleServiceWorker();
 
-    // Listen for new service worker installations
+    // Listen for new service worker installations (for updates)
     const handleControllerChange = () => {
-      if (!hasHandledThisSession.current) {
-        handleServiceWorker();
-      }
+      // Reset session flag on controller change to handle updates
+      hasHandledThisSession.current = false;
+      handleServiceWorker();
     };
 
     navigator.serviceWorker.addEventListener(
