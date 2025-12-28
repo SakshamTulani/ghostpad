@@ -22,7 +22,7 @@ export function EmptyState({ workspaceId, hasPages = false }: EmptyStateProps) {
         ...PAGE_DEFAULTS,
         parentId: workspaceId,
       });
-      router.push(`/${workspaceId}/${newPageId}`);
+      router.push(`/app?workspace=${workspaceId}&page=${newPageId}`);
     } catch (e) {
       console.error("Failed to create page", e);
     }
