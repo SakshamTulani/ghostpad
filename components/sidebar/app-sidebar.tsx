@@ -24,7 +24,6 @@ export function AppSidebar({
         <WorkspaceSwitcher activeWorkspaceId={workspaceId} />
       </SidebarHeader>
       <SidebarContent>
-        {/* We will implement PageTree next */}
         <PageTree workspaceId={workspaceId} />
       </SidebarContent>
       <SidebarRail />
