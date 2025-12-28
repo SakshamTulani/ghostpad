@@ -53,7 +53,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
   return (
     <>
       <Link
-        href={`/${workspace.id}`}
+        href={`/app?workspace=${workspace.id}`}
         className="block group relative focus-visible:outline-none rounded-2xl">
         <Card className="h-full border ring-0 shadow-sm transition-all duration-200 group-hover:shadow-md group-hover:border-primary/20 group-focus-visible:ring-2 group-focus-visible:ring-ring group-focus-visible:ring-offset-2">
           <CardHeader className="pb-3">

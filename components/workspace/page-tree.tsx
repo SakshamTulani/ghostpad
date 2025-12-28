@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Emoji } from "@/components/ui/icon-picker";
 import { useRootPages, useChildPages, usePage } from "@/hooks/use-ghostpad";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Page } from "@/lib/dexie/db";
 import React from "react";
 import { PAGE_DEFAULTS } from "@/lib/defaults";
@@ -51,7 +51,7 @@ export function PageTree({ workspaceId }: { workspaceId: string }) {
         title: PAGE_DEFAULTS.title,
         parentId: workspaceId,
       });
-      router.push(`/${workspaceId}/${newPageId}`);
+      router.push(`/app?workspace=${workspaceId}&page=${newPageId}`);
     } catch (e) {
       console.error("Failed to create root page", e);
     }
@@ -108,7 +108,7 @@ function PageItem({
   depth?: number;
 }) {
   const router = useRouter();
-  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { pages: childPages, createPage: createChild } = useChildPages(page.id);
   const { softDeletePage } = usePage(page.id);
 
@@ -117,7 +117,8 @@ function PageItem({
   // We can use Collapsible 'open' state
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const isActive = pathname === `/${workspaceId}/${page.id}`;
+  const currentPageId = searchParams.get("page");
+  const isActive = currentPageId === page.id;
   const hasChildren = childPages && childPages.length > 0;
 
   const handleCreateChild = async (e: React.MouseEvent) => {
@@ -129,7 +130,7 @@ function PageItem({
         parentId: page.id,
       });
       setIsOpen(true); // Auto expand
-      router.push(`/${workspaceId}/${newPageId}`);
+      router.push(`/app?workspace=${workspaceId}&page=${newPageId}`);
     } catch (err) {
       console.error("Failed to create child page", err);
     }
@@ -138,7 +139,7 @@ function PageItem({
   const handleDelete = async () => {
     await softDeletePage(page.id);
     if (isActive) {
-      router.push(`/${workspaceId}`);
+      router.push(`/app?workspace=${workspaceId}`);
     }
   };
 
@@ -147,7 +148,9 @@ function PageItem({
       <SidebarMenuItem>
         <SidebarMenuButton asChild isActive={isActive} className="group/item">
           <div
-            onClick={() => router.push(`/${workspaceId}/${page.id}`)}
+            onClick={() =>
+              router.push(`/app?workspace=${workspaceId}&page=${page.id}`)
+            }
             className="flex w-full items-center gap-2 cursor-pointer"
             style={{ paddingLeft: `${12 * depth}px` }}>
             {/* Show chevron if there are children usually, but Notion shows it always or on hover used for nesting */}

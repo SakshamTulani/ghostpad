@@ -70,7 +70,7 @@ export function WorkspaceSwitcher({
               {workspaces?.map((workspace) => (
                 <DropdownMenuItem
                   key={workspace.id}
-                  onClick={() => router.push(`/${workspace.id}`)}
+                  onClick={() => router.push(`/app?workspace=${workspace.id}`)}
                   className="gap-2 p-2">
                   <div className="flex size-6 items-center justify-center rounded-sm border">
                     {workspace.icon ? (
@@ -105,7 +105,7 @@ export function WorkspaceSwitcher({
         open={createDialogOpen}
         onOpenChange={setCreateDialogOpen}
         onSuccess={(workspaceId) => {
-          router.push(`/${workspaceId}`);
+          router.push(`/app?workspace=${workspaceId}`);
         }}
       />
     </>

@@ -17,9 +17,9 @@ declare const self: ServiceWorkerGlobalScope;
 const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,
   precacheOptions: {
-    // App Shell Pattern: serve cached "/app-shell" for ALL navigation requests
-    // The app-shell parses the URL and renders the correct view from Dexie
-    navigateFallback: "/app-shell",
+    // SPA Navigation: serve cached "/app" for navigation requests
+    // The /app page reads query params and renders the appropriate view
+    navigateFallback: "/app",
     // Don't use fallback for these patterns
     navigateFallbackDenylist: [
       /^\/api\//, // API routes
