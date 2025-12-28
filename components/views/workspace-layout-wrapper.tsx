@@ -6,7 +6,7 @@ import { WorkspaceHeader } from "@/components/workspace/header";
 
 interface WorkspaceLayoutWrapperProps {
   children: React.ReactNode;
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 /**
