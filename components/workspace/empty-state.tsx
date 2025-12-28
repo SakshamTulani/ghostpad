@@ -3,8 +3,8 @@
 import { useRootPages } from "@/hooks/use-ghostpad";
 import { Button } from "@/components/ui/button";
 import { FileText, Plus, MousePointerClick } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { PAGE_DEFAULTS } from "@/lib/defaults";
+import { navigateToApp } from "@/lib/navigation";
 
 interface EmptyStateProps {
   workspaceId: string;
@@ -13,7 +13,6 @@ interface EmptyStateProps {
 
 export function EmptyState({ workspaceId, hasPages = false }: EmptyStateProps) {
   const { createPage } = useRootPages(workspaceId);
-  const router = useRouter();
 
   const handleCreateFirstPage = async () => {
     try {
@@ -22,7 +21,7 @@ export function EmptyState({ workspaceId, hasPages = false }: EmptyStateProps) {
         ...PAGE_DEFAULTS,
         parentId: workspaceId,
       });
-      router.push(`/app?workspace=${workspaceId}&page=${newPageId}`);
+      navigateToApp({ workspace: workspaceId, page: newPageId });
     } catch (e) {
       console.error("Failed to create page", e);
     }

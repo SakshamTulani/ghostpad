@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Check, ChevronsUpDown, Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { navigateToApp } from "@/lib/navigation";
 
 import {
   DropdownMenu,
@@ -29,7 +29,6 @@ export function WorkspaceSwitcher({
 }) {
   const { isMobile } = useSidebar();
   const { workspaces } = useWorkspaces();
-  const router = useRouter();
   const [createDialogOpen, setCreateDialogOpen] = React.useState(false);
 
   const activeWorkspace = workspaces?.find((w) => w.id === activeWorkspaceId);
@@ -70,7 +69,7 @@ export function WorkspaceSwitcher({
               {workspaces?.map((workspace) => (
                 <DropdownMenuItem
                   key={workspace.id}
-                  onClick={() => router.push(`/app?workspace=${workspace.id}`)}
+                  onClick={() => navigateToApp({ workspace: workspace.id })}
                   className="gap-2 p-2">
                   <div className="flex size-6 items-center justify-center rounded-sm border">
                     {workspace.icon ? (
@@ -105,7 +104,7 @@ export function WorkspaceSwitcher({
         open={createDialogOpen}
         onOpenChange={setCreateDialogOpen}
         onSuccess={(workspaceId) => {
-          router.push(`/app?workspace=${workspaceId}`);
+          navigateToApp({ workspace: workspaceId });
         }}
       />
     </>

@@ -24,7 +24,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Emoji } from "@/components/ui/icon-picker";
 import { useRootPages, useChildPages, usePage } from "@/hooks/use-ghostpad";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { navigateToApp } from "@/lib/navigation";
 import { Page } from "@/lib/dexie/db";
 import React from "react";
 import { PAGE_DEFAULTS } from "@/lib/defaults";
@@ -42,7 +43,6 @@ import { PageTreeSkeleton } from "@/components/ui/skeletons";
 
 export function PageTree({ workspaceId }: { workspaceId: string }) {
   const { pages, isLoading, createPage } = useRootPages(workspaceId);
-  const router = useRouter();
 
   const handleCreatePage = async () => {
     try {
@@ -51,7 +51,7 @@ export function PageTree({ workspaceId }: { workspaceId: string }) {
         title: PAGE_DEFAULTS.title,
         parentId: workspaceId,
       });
-      router.push(`/app?workspace=${workspaceId}&page=${newPageId}`);
+      navigateToApp({ workspace: workspaceId, page: newPageId });
     } catch (e) {
       console.error("Failed to create root page", e);
     }
@@ -107,7 +107,6 @@ function PageItem({
   workspaceId: string;
   depth?: number;
 }) {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const { isMobile, setOpenMobile } = useSidebar();
   const { pages: childPages, createPage: createChild } = useChildPages(page.id);
@@ -132,7 +131,7 @@ function PageItem({
         parentId: page.id,
       });
       setIsOpen(true); // Auto expand
-      router.push(`/app?workspace=${workspaceId}&page=${newPageId}`);
+      navigateToApp({ workspace: workspaceId, page: newPageId });
       if (isMobile) setOpenMobile(false);
     } catch (err) {
       console.error("Failed to create child page", err);
@@ -143,7 +142,7 @@ function PageItem({
     await softDeletePage(page.id);
     setIsDeleteDialogOpen(false);
     if (isActive) {
-      router.push(`/app?workspace=${workspaceId}`);
+      navigateToApp({ workspace: workspaceId });
     }
   };
 
@@ -174,7 +173,7 @@ function PageItem({
           <SidebarMenuButton asChild isActive={isActive} className="group/item">
             <div
               onClick={() => {
-                router.push(`/app?workspace=${workspaceId}&page=${page.id}`);
+                navigateToApp({ workspace: workspaceId, page: page.id });
                 if (isMobile) setOpenMobile(false);
               }}
               className="flex w-full items-center gap-2 cursor-pointer"
