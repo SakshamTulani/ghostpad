@@ -12,6 +12,7 @@ export const { dynamic, dynamicParams, revalidate, generateStaticParams, GET } =
   createSerwistRoute({
     additionalPrecacheEntries: [{ url: "/app", revision }],
     swSrc: "app/sw.ts",
+    reloadOnOnline: false,
 
     // Copy relevant Next.js configuration (assetPrefix,
     // basePath, distDir) over if you've changed them.
