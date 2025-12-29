@@ -37,7 +37,8 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self'",
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; connect-src 'self' https://z25jq2gml.dexie.cloud wss://z25jq2gml.dexie.cloud; img-src 'self' https://z25jq2gml.dexie.cloud data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:;",
           },
         ],
       },
