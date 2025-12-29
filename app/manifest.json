@@ -1,6 +1,7 @@
 {
   "name": "Ghostpad",
   "short_name": "Ghostpad",
+  "description": "A modern note-taking app that works offline",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -12,10 +13,13 @@
       "src": "/web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any"
     }
   ],
   "theme_color": "#ffffff",
   "background_color": "#ffffff",
-  "display": "standalone"
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/",
+  "orientation": "portrait"
 }

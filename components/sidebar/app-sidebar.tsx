@@ -11,9 +11,12 @@ import { WorkspaceSwitcher } from "@/components/sidebar/workspace-switcher";
 import { useParams } from "next/navigation";
 import { PageTree } from "../workspace/page-tree";
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  workspaceId: workspaceIdProp,
+  ...props
+}: React.ComponentProps<typeof Sidebar> & { workspaceId?: string }) {
   const params = useParams();
-  const workspaceId = params.workspaceId as string;
+  const workspaceId = workspaceIdProp || (params.workspaceId as string);
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -21,7 +24,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <WorkspaceSwitcher activeWorkspaceId={workspaceId} />
       </SidebarHeader>
       <SidebarContent>
-        {/* We will implement PageTree next */}
         <PageTree workspaceId={workspaceId} />
       </SidebarContent>
       <SidebarRail />

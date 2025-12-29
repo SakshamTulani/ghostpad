@@ -2,19 +2,23 @@
 
 import { EmptyState } from "@/components/workspace/empty-state";
 import { useRootPages, useWorkspace } from "@/hooks/use-ghostpad";
-import { useParams } from "next/navigation";
 import { WorkspaceSkeleton } from "@/components/ui/skeletons";
 import { NotFoundState } from "@/components/workspace/not-found-state";
 
-export default function WorkspacePage() {
-  const params = useParams();
-  const workspaceId = params.workspaceId as string;
+interface WorkspaceContentProps {
+  workspaceId: string;
+}
+
+/**
+ * Workspace content component - renders just the content, no layout wrapper.
+ * Use inside workspace layout routes or compose with WorkspaceLayoutWrapper.
+ */
+export function WorkspaceContent({ workspaceId }: WorkspaceContentProps) {
   const { workspace, isLoading: workspaceLoading } = useWorkspace(workspaceId);
   const { pages, isLoading: pagesLoading } = useRootPages(workspaceId);
 
   const isLoading = workspaceLoading || pagesLoading;
 
-  // Show skeleton during loading
   if (isLoading) {
     return (
       <div className="flex flex-1 flex-col h-[calc(100vh-4rem)]">
@@ -23,7 +27,6 @@ export default function WorkspacePage() {
     );
   }
 
-  // Workspace doesn't exist
   if (!workspace) {
     return (
       <div className="flex flex-1 flex-col h-[calc(100vh-4rem)]">
@@ -32,11 +35,12 @@ export default function WorkspacePage() {
     );
   }
 
-  const hasPages = pages && pages.length > 0;
-
   return (
     <div className="flex flex-1 flex-col h-[calc(100vh-4rem)]">
-      <EmptyState workspaceId={workspaceId} hasPages={hasPages} />
+      <EmptyState
+        workspaceId={workspaceId}
+        hasPages={pages && pages.length > 0}
+      />
     </div>
   );
 }

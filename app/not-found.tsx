@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Ghost, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { Logo } from "@/components/logo";
 
 export default function NotFound() {
   return (
@@ -8,7 +9,7 @@ export default function NotFound() {
       <div className="relative mb-8">
         <div className="absolute inset-0 animate-pulse rounded-full bg-primary/20 blur-3xl" />
         <div className="relative flex h-32 w-32 items-center justify-center rounded-full bg-muted/50 shadow-xl border border-border/50 backdrop-blur-sm">
-          <Ghost className="h-16 w-16 text-primary animate-bounce-slow" />
+          <Logo size={64} className="animate-bounce-slow" />
         </div>
         {/* Decorative small ghosts or elements could go here */}
       </div>
