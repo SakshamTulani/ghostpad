@@ -26,7 +26,7 @@ export function NotFoundState({ type, workspaceId }: NotFoundStateProps) {
       <div className="flex gap-3 mt-8">
         {type === "page" && workspaceId && (
           <Button variant="outline" asChild>
-            <Link href={`/${workspaceId}`}>
+            <Link href={`/app?workspace=${workspaceId}`}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to workspace
             </Link>

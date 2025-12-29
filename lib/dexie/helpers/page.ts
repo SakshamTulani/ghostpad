@@ -142,7 +142,8 @@ export const getRootPages = async (workspaceId: string): Promise<Page[]> => {
     .where("workspaceId")
     .equals(workspaceId)
     .filter((p) => p.parentId === workspaceId && !p.deleted)
-    .sortBy("title"); // or createdAt
+    .reverse()
+    .sortBy("updatedAt");
 };
 
 /**
@@ -155,7 +156,8 @@ export const getChildPages = async (parentId: string): Promise<Page[]> => {
     .where("parentId")
     .equals(parentId)
     .filter((p) => !p.deleted)
-    .sortBy("title");
+    .reverse()
+    .sortBy("updatedAt");
 };
 
 /**
@@ -184,5 +186,5 @@ export const getAllPages = async (workspaceId: string): Promise<Page[]> => {
     .where("workspaceId")
     .equals(workspaceId)
     .filter((p) => !p.deleted)
-    .toArray();
+    .sortBy("updatedAt");
 };

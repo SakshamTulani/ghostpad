@@ -1,12 +1,12 @@
 "use client";
 
 import { useWorkspaces } from "@/hooks/use-ghostpad";
-import { CreateWorkspaceDialog } from "@/components/dashboard/create-workspace-dialog";
+import { WorkspaceDialog } from "@/components/dashboard/workspace-dialog";
 import { WorkspaceCard } from "@/components/dashboard/workspace-card";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import { Ghost } from "lucide-react";
+import { Logo } from "@/components/logo";
 
-export default function DashboardPage() {
+export function DashboardView() {
   const { workspaces, isLoading } = useWorkspaces();
 
   return (
@@ -22,7 +22,7 @@ export default function DashboardPage() {
                 Manage your knowledge bases and notes.
               </p>
             </div>
-            <CreateWorkspaceDialog />
+            <WorkspaceDialog showTrigger />
           </div>
 
           {isLoading ? (
@@ -43,7 +43,7 @@ export default function DashboardPage() {
           ) : (
             <div className="flex h-100 flex-col items-center justify-center gap-4 rounded-2xl border border-dashed bg-card/50 p-8 text-center animate-in fade-in-50 zoom-in-95 duration-500">
               <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/5">
-                <Ghost className="h-10 w-10 text-primary/50" />
+                <Logo size={40} className="opacity-50" />
               </div>
               <div className="max-w-105 space-y-1">
                 <h3 className="text-xl font-semibold">No workspaces yet</h3>
@@ -52,7 +52,7 @@ export default function DashboardPage() {
                   documents.
                 </p>
               </div>
-              <CreateWorkspaceDialog />
+              <WorkspaceDialog showTrigger />
             </div>
           )}
         </div>

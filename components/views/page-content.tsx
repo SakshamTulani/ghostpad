@@ -1,17 +1,21 @@
 "use client";
 
 import { usePage, useWorkspace } from "@/hooks/use-ghostpad";
-import { useParams } from "next/navigation";
-import { IconName } from "@/components/ui/icon-picker";
 import Editor from "@/components/editor";
 import { NoteHeader } from "@/components/workspace/note-header";
 import { PageSkeleton } from "@/components/ui/skeletons";
 import { NotFoundState } from "@/components/workspace/not-found-state";
 
-export default function PageView() {
-  const params = useParams();
-  const workspaceId = params.workspaceId as string;
-  const pageId = params.pageId as string;
+interface PageContentProps {
+  workspaceId: string;
+  pageId: string;
+}
+
+/**
+ * Page content component - renders just the content, no layout wrapper.
+ * Use inside workspace layout routes or compose with WorkspaceLayoutWrapper.
+ */
+export function PageContent({ workspaceId, pageId }: PageContentProps) {
   const { workspace, isLoading: workspaceLoading } = useWorkspace(workspaceId);
   const { page, isLoading: pageLoading, updatePage } = usePage(pageId);
 
@@ -19,16 +23,14 @@ export default function PageView() {
     updatePage(pageId, { title: e.target.value });
   };
 
-  const handleIconChange = (icon: IconName) => {
+  const handleIconChange = (icon: string) => {
     updatePage(pageId, { icon });
   };
 
-  // Show skeleton during loading
   if (workspaceLoading || pageLoading) {
     return <PageSkeleton />;
   }
 
-  // Workspace doesn't exist
   if (!workspace) {
     return (
       <div className="flex flex-1 flex-col h-[calc(100vh-4rem)]">
@@ -37,7 +39,6 @@ export default function PageView() {
     );
   }
 
-  // Page doesn't exist (but workspace does)
   if (!page) {
     return (
       <div className="flex flex-1 flex-col h-[calc(100vh-4rem)]">
@@ -53,9 +54,8 @@ export default function PageView() {
         onIconChange={handleIconChange}
         onTitleChange={handleTitleChange}
       />
-
       <div className="pl-4">
-        <Editor pageId={pageId} />
+        <Editor key={pageId} pageId={pageId} />
       </div>
     </div>
   );

@@ -45,5 +45,12 @@ next-env.d.ts
 ghostpad_dev_roadmap.md
 
 #dexie-cloud
-dexie-cloud.json
 dexie-cloud.key
+dexie-cloud.json
+
+#serwist
+public/sw*
+public/swe-worker*
+
+#certificates
+/certificates

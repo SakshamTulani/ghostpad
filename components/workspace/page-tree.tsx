@@ -22,9 +22,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Icon, IconName } from "@/components/ui/icon-picker";
+import { Emoji } from "@/components/ui/icon-picker";
 import { useRootPages, useChildPages, usePage } from "@/hooks/use-ghostpad";
-import { useRouter, usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { navigateToApp } from "@/lib/navigation";
 import { Page } from "@/lib/dexie/db";
 import React from "react";
 import { PAGE_DEFAULTS } from "@/lib/defaults";
@@ -37,13 +38,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { PageTreeSkeleton } from "@/components/ui/skeletons";
 
 export function PageTree({ workspaceId }: { workspaceId: string }) {
   const { pages, isLoading, createPage } = useRootPages(workspaceId);
-  const router = useRouter();
 
   const handleCreatePage = async () => {
     try {
@@ -52,7 +51,7 @@ export function PageTree({ workspaceId }: { workspaceId: string }) {
         title: PAGE_DEFAULTS.title,
         parentId: workspaceId,
       });
-      router.push(`/${workspaceId}/${newPageId}`);
+      navigateToApp({ workspace: workspaceId, page: newPageId });
     } catch (e) {
       console.error("Failed to create root page", e);
     }
@@ -108,17 +107,19 @@ function PageItem({
   workspaceId: string;
   depth?: number;
 }) {
-  const router = useRouter();
-  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { isMobile, setOpenMobile } = useSidebar();
   const { pages: childPages, createPage: createChild } = useChildPages(page.id);
   const { softDeletePage } = usePage(page.id);
-  const { isMobile, setOpenMobile } = useSidebar();
+
   // Basic isExpanded simply based on if it has children for now
   // Real notion-like tree needs state persistence
   // We can use Collapsible 'open' state
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
-  const isActive = pathname === `/${workspaceId}/${page.id}`;
+  const currentPageId = searchParams.get("page");
+  const isActive = currentPageId === page.id;
   const hasChildren = childPages && childPages.length > 0;
 
   const handleCreateChild = async (e: React.MouseEvent) => {
@@ -130,7 +131,8 @@ function PageItem({
         parentId: page.id,
       });
       setIsOpen(true); // Auto expand
-      router.push(`/${workspaceId}/${newPageId}`);
+      navigateToApp({ workspace: workspaceId, page: newPageId });
+      if (isMobile) setOpenMobile(false);
     } catch (err) {
       console.error("Failed to create child page", err);
     }
@@ -138,124 +140,131 @@ function PageItem({
 
   const handleDelete = async () => {
     await softDeletePage(page.id);
+    setIsDeleteDialogOpen(false);
     if (isActive) {
-      router.push(`/${workspaceId}`);
+      navigateToApp({ workspace: workspaceId });
     }
   };
 
   return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <SidebarMenuItem>
-        <SidebarMenuButton asChild isActive={isActive} className="group/item">
-          <div
-            onClick={() => {
-              router.push(`/${workspaceId}/${page.id}`);
-              if (isMobile) {
-                setOpenMobile(false);
-              }
-            }}
-            className="flex w-full items-center gap-2 cursor-pointer"
-            style={{ paddingLeft: `${12 * depth}px` }}>
-            {/* Show chevron if there are children usually, but Notion shows it always or on hover used for nesting */}
-            {/* Using standard sidebar approach: Chevron triggers collapse, Text triggers nav */}
+    <>
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete page?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete &ldquo;
+              {page.title || "Untitled"}&rdquo;? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={handleDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild isActive={isActive} className="group/item">
             <div
-              className="flex items-center justify-center h-4 w-4 rounded hover:bg-sidebar-accent/50 mr-1"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsOpen(!isOpen);
-              }}>
-              {hasChildren ? (
-                <ChevronRight
-                  className={`h-3 w-3 transition-transform ${
-                    isOpen ? "rotate-90" : ""
-                  }`}
-                />
-              ) : (
-                <span className="w-3" /> // spacer
-              )}
-            </div>
+              onClick={() => {
+                navigateToApp({ workspace: workspaceId, page: page.id });
+                if (isMobile) setOpenMobile(false);
+              }}
+              className="flex w-full items-center gap-2 cursor-pointer"
+              style={{ paddingLeft: `${12 * depth}px` }}>
+              {/* Show chevron if there are children usually, but Notion shows it always or on hover used for nesting */}
+              {/* Using standard sidebar approach: Chevron triggers collapse, Text triggers nav */}
+              <div
+                className="flex items-center justify-center h-4 w-4 rounded hover:bg-sidebar-accent/50 mr-1"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsOpen(!isOpen);
+                }}>
+                {hasChildren ? (
+                  <ChevronRight
+                    className={`h-3 w-3 transition-transform ${
+                      isOpen ? "rotate-90" : ""
+                    }`}
+                  />
+                ) : (
+                  <span className="w-3" /> // spacer
+                )}
+              </div>
 
-            <div className="flex items-center justify-center h-5 w-5">
-              {page.icon ? (
-                <Icon name={page.icon as IconName} className="h-4 w-4" />
-              ) : (
-                <Smile className="h-4 w-4 shrink-0 text-muted-foreground" />
-              )}
-            </div>
-            <span className="grow truncate">{page.title || "Untitled"}</span>
+              <div className="flex items-center justify-center h-5 w-5">
+                {page.icon ? (
+                  <Emoji emoji={page.icon} className="h-4 w-4" />
+                ) : (
+                  <Smile className="h-4 w-4 shrink-0 text-muted-foreground" />
+                )}
+              </div>
+              <span className="grow truncate">{page.title || "Untitled"}</span>
 
-            {/* Actions - inline to avoid overlap with nested content */}
-            <div className="flex items-center gap-0.5 shrink-0 opacity-100 md:opacity-0 md:group-hover/item:opacity-100 transition-opacity">
-              <button
-                className="flex items-center justify-center h-6 w-6 rounded hover:bg-sidebar-accent text-muted-foreground hover:text-foreground"
-                onClick={handleCreateChild}
-                title="Add sub-page">
-                <Plus className="h-4 w-4" />
-              </button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    className="flex items-center justify-center h-6 w-6 rounded hover:bg-sidebar-accent text-muted-foreground hover:text-foreground"
+              {/* Actions - inline to avoid overlap with nested content */}
+              <div className="flex items-center gap-0.5 shrink-0 opacity-100 md:opacity-0 md:group-hover/item:opacity-100 transition-opacity">
+                <button
+                  className="flex items-center justify-center h-6 w-6 rounded hover:bg-sidebar-accent text-muted-foreground hover:text-foreground"
+                  onClick={handleCreateChild}
+                  title="Add sub-page">
+                  <Plus className="h-4 w-4" />
+                </button>
+                <DropdownMenu modal={false}>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      className="flex items-center justify-center h-6 w-6 rounded hover:bg-sidebar-accent text-muted-foreground hover:text-foreground"
+                      onClick={(e) => e.stopPropagation()}>
+                      <MoreHorizontal className="h-4 w-4" />
+                      <span className="sr-only">More options</span>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className="w-48"
+                    side="right"
+                    align="start"
                     onClick={(e) => e.stopPropagation()}>
-                    <MoreHorizontal className="h-4 w-4" />
-                    <span className="sr-only">More options</span>
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  className="w-48"
-                  side="right"
-                  align="start">
-                  <DropdownMenuItem onClick={handleCreateChild}>
-                    <Plus className="mr-2 h-4 w-4 text-muted-foreground" />
-                    <span>Add sub-page</span>
-                  </DropdownMenuItem>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <DropdownMenuItem
-                        onSelect={(e) => e.preventDefault()}
-                        className="text-destructive focus:text-destructive">
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        <span>Delete</span>
-                      </DropdownMenuItem>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Delete page?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Are you sure you want to delete &ldquo;
-                          {page.title || "Untitled"}&rdquo;? This action cannot
-                          be undone.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          variant="destructive"
-                          onClick={handleDelete}>
-                          Delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCreateChild(e);
+                      }}>
+                      <Plus className="mr-2 h-4 w-4 text-muted-foreground" />
+                      <span>Add sub-page</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsDeleteDialogOpen(true);
+                      }}
+                      className="text-destructive focus:text-destructive">
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      <span>Delete</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
-          </div>
-        </SidebarMenuButton>
-      </SidebarMenuItem>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
 
-      {hasChildren && (
-        <CollapsibleContent>
-          {childPages.map((child) => (
-            <PageItem
-              key={child.id}
-              page={child}
-              workspaceId={workspaceId}
-              depth={depth + 1}
-            />
-          ))}
-        </CollapsibleContent>
-      )}
-    </Collapsible>
+        {hasChildren && (
+          <CollapsibleContent>
+            {childPages.map((child) => (
+              <PageItem
+                key={child.id}
+                page={child}
+                workspaceId={workspaceId}
+                depth={depth + 1}
+              />
+            ))}
+          </CollapsibleContent>
+        )}
+      </Collapsible>
+    </>
   );
 }

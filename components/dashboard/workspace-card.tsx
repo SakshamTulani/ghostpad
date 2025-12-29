@@ -31,9 +31,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { EditWorkspaceDialog } from "./edit-workspace-dialog";
+import { WorkspaceDialog } from "./workspace-dialog";
 import { useWorkspace, usePageCount } from "@/hooks/use-ghostpad";
-import { Icon, IconName } from "@/components/ui/icon-picker";
+import { Emoji } from "@/components/ui/icon-picker";
 
 interface WorkspaceCardProps {
   workspace: Workspace;
@@ -50,31 +50,20 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
     setShowDeleteAlert(false);
   };
 
-  // Safe icon rendering: check if icon string looks like a valid lucide icon name (simple heuristic)
-  // or just attempt to render it. If it was an emoji, rendering <Icon name="emoji" /> might fail or show nothing.
-  // For robustness during transition, we could check.
-  // But let's assume we want to use Icon component.
-  // If workspace.icon is just an emoji, we might want to render it as text.
-  // A simple check: if it contains non-letter characters (except dashes), treat as emoji.
-  const isEmoji = workspace.icon && !/^[a-z-]+$/.test(workspace.icon);
-
   return (
     <>
       <Link
-        href={`/${workspace.id}`}
+        href={`/app?workspace=${workspace.id}`}
         className="block group relative focus-visible:outline-none rounded-2xl">
         <Card className="h-full border ring-0 shadow-sm transition-all duration-200 group-hover:shadow-md group-hover:border-primary/20 group-focus-visible:ring-2 group-focus-visible:ring-ring group-focus-visible:ring-offset-2">
           <CardHeader className="pb-3">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-xl">
-                  {isEmoji ? (
-                    workspace.icon
+                  {workspace.icon ? (
+                    <Emoji emoji={workspace.icon} />
                   ) : (
-                    <Icon
-                      name={(workspace.icon as IconName) || "ghost"}
-                      className="h-5 w-5"
-                    />
+                    workspace.name?.charAt(0) ?? "W"
                   )}
                 </div>
                 <div>
@@ -144,7 +133,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
         </Card>
       </Link>
 
-      <EditWorkspaceDialog
+      <WorkspaceDialog
         workspace={workspace}
         open={showEditDialog}
         onOpenChange={setShowEditDialog}

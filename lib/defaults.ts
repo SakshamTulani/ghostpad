@@ -1,5 +1,3 @@
-import { IconName } from "@/components/ui/icon-picker";
-
 /**
  * Default values for creating new workspaces and pages.
  * Centralized here so they can be changed in one place.
@@ -7,10 +5,10 @@ import { IconName } from "@/components/ui/icon-picker";
 
 export const WORKSPACE_DEFAULTS = {
   name: "My Workspace",
-  icon: "ghost" as IconName,
+  icon: "👻" as string,
 } as const;
 
 export const PAGE_DEFAULTS = {
   title: "Untitled",
-  icon: undefined as IconName | undefined,
+  icon: undefined as string | undefined,
 } as const;
