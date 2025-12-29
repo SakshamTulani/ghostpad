@@ -1,6 +1,7 @@
 import { defaultCache } from "@serwist/turbopack/worker";
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
 import { Serwist, StaleWhileRevalidate } from "serwist";
+import "dexie-cloud-addon/service-worker";
 
 // This declares the value of `injectionPoint` to TypeScript.
 // `injectionPoint` is the string that will be replaced by the
@@ -30,7 +31,6 @@ const serwist = new Serwist({
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: true,
-  importScripts: ["dexie-cloud-addon/service-worker"],
   runtimeCaching: [
     // Stale-while-revalidate for /app route
     // Serves cached version immediately, but fetches from network to update cache
