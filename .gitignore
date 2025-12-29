@@ -52,3 +52,5 @@ dexie-cloud.json
 public/sw*
 public/swe-worker*
 
+#certificates
+/certificates

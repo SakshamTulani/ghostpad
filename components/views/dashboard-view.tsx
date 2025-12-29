@@ -4,7 +4,7 @@ import { useWorkspaces } from "@/hooks/use-ghostpad";
 import { WorkspaceDialog } from "@/components/dashboard/workspace-dialog";
 import { WorkspaceCard } from "@/components/dashboard/workspace-card";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Ghost } from "lucide-react";
+import { Logo } from "@/components/logo";
 
 export function DashboardView() {
   const { workspaces, isLoading } = useWorkspaces();
@@ -14,9 +14,7 @@ export function DashboardView() {
       <header className="sticky top-0 z-10 border-b bg-background/80 px-6 py-4 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <Ghost className="h-5 w-5" />
-            </div>
+            <Logo size={32} />
             <h1 className="text-xl font-bold tracking-tight">Ghostpad</h1>
           </div>
           <ThemeToggle />
@@ -53,7 +51,7 @@ export function DashboardView() {
           ) : (
             <div className="flex h-100 flex-col items-center justify-center gap-4 rounded-2xl border border-dashed bg-card/50 p-8 text-center animate-in fade-in-50 zoom-in-95 duration-500">
               <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/5">
-                <Ghost className="h-10 w-10 text-primary/50" />
+                <Logo size={40} className="opacity-50" />
               </div>
               <div className="max-w-105 space-y-1">
                 <h3 className="text-xl font-semibold">No workspaces yet</h3>
