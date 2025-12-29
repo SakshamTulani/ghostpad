@@ -1,6 +1,7 @@
-import Dexie, { type EntityTable } from "dexie";
+import Dexie from "dexie";
 import yDexie from "y-dexie";
 import type * as Y from "yjs";
+import dexieCloud, { type DexieCloudTable } from "dexie-cloud-addon";
 
 export interface Workspace {
   id: string;
@@ -26,12 +27,12 @@ export interface Page {
 }
 
 export class GhostpadDatabase extends Dexie {
-  workspaces!: EntityTable<Workspace, "id">;
-  pages!: EntityTable<Page, "id">;
+  workspaces!: DexieCloudTable<Workspace, "id">;
+  pages!: DexieCloudTable<Page, "id">;
 
   constructor() {
     // Add the yDexie addon to handle Y.Doc properties
-    super("ghostpad-db", { addons: [yDexie] });
+    super("ghostpad-db", { addons: [yDexie, dexieCloud] });
 
     this.version(1).stores({
       // Workspace index
@@ -49,6 +50,13 @@ export class GhostpadDatabase extends Dexie {
         updatedAt, 
         content: Y.Doc
       `,
+    });
+    // Configure the cloud database URL from your dexie-cloud.json
+    this.cloud.configure({
+      databaseUrl: process.env.NEXT_PUBLIC_DEXIE_CLOUD_DB_URL || "",
+      requireAuth: false,
+      customLoginGui: true,
+      tryUseServiceWorker: true,
     });
   }
 }

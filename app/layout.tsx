@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Public_Sans } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AuthProvider } from "@/components/auth/auth-provider";
 import { SerwistProvider } from "@/lib/serwist";
 import { Toaster } from "@/components/ui/sonner";
 import { PwaStatus } from "@/components/pwa-status";
@@ -77,13 +78,13 @@ export default function RootLayout({
     <html lang="en" className={publicSans.variable} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <SerwistProvider swUrl="/serwist/sw.js">
+        <SerwistProvider swUrl="/serwist/sw.js" reloadOnOnline={false}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange>
-            {children}
+            <AuthProvider>{children}</AuthProvider>
             <Toaster />
             <PwaStatus />
           </ThemeProvider>

@@ -3,7 +3,7 @@
 import { useWorkspaces } from "@/hooks/use-ghostpad";
 import { WorkspaceDialog } from "@/components/dashboard/workspace-dialog";
 import { WorkspaceCard } from "@/components/dashboard/workspace-card";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { Logo } from "@/components/logo";
 
 export function DashboardView() {
@@ -11,15 +11,7 @@ export function DashboardView() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-10 border-b bg-background/80 px-6 py-4 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Logo size={32} />
-            <h1 className="text-xl font-bold tracking-tight">Ghostpad</h1>
-          </div>
-          <ThemeToggle />
-        </div>
-      </header>
+      <DashboardHeader />
 
       <main className="flex-1 px-6 py-8">
         <div className="mx-auto max-w-6xl space-y-8">

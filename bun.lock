@@ -14,6 +14,7 @@
         "clsx": "^2.1.1",
         "date-fns": "^4.1.0",
         "dexie": "^4.2.1",
+        "dexie-cloud-addon": "^4.2.4",
         "dexie-react-hooks": "^4.2.0",
         "emoji-picker-react": "^4.16.1",
         "lucide-react": "^0.562.0",
@@ -818,6 +819,10 @@
     "devlop": ["devlop@1.1.0", "", { "dependencies": { "dequal": "^2.0.0" } }, "sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA=="],
 
     "dexie": ["dexie@4.2.1", "", {}, "sha512-Ckej0NS6jxQ4Po3OrSQBFddayRhTCic2DoCAG5zacOfOVB9P2Q5Xc5uL/nVa7ZVs+HdMnvUPzLFCB/JwpB6Csg=="],
+
+    "dexie-cloud-addon": ["dexie-cloud-addon@4.2.4", "", { "dependencies": { "dexie-cloud-common": "^1.0.53", "rxjs": "^7.x", "y-dexie": "^4.2.2", "y-protocols": "^1.0.6", "yjs": "^13.6.27" }, "peerDependencies": { "dexie": "^4.2.1" } }, "sha512-VhrhhZB/P83aTQS9zXhYJQ9scaxSkyYlqvQRkH/tYlEFXVjQCeh9Nz5PE+9gunsbworQnIdU727zJ9SPxWfwUA=="],
+
+    "dexie-cloud-common": ["dexie-cloud-common@1.0.53", "", { "dependencies": { "lib0": "^0.2.97" } }, "sha512-tg93y/dfNxxBHLUYVW+yHfqEoKo8Uweh1tjkhuYf/Eg+yYO3MlEW9EV0tBKWDvicJ5JIqCXWmIVp1Jhs7mzu3g=="],
 
     "dexie-react-hooks": ["dexie-react-hooks@4.2.0", "", { "peerDependencies": { "@types/react": ">=16", "dexie": ">=4.2.0-alpha.1 <5.0.0", "react": ">=16" } }, "sha512-u7KqTX9JpBQK8+tEyA9X0yMGXlSCsbm5AU64N6gjvGk/IutYDpLBInMYEAEC83s3qhIvryFS+W+sqLZUBEvePQ=="],
 
@@ -1630,6 +1635,8 @@
     "run-applescript": ["run-applescript@7.1.0", "", {}, "sha512-DPe5pVFaAsinSaV6QjQ6gdiedWDcRCbUuiQfQa2wmWV7+xC9bGulGI8+TdRmoFkAPaBXk8CrAbnlY2ISniJ47Q=="],
 
     "run-parallel": ["run-parallel@1.2.0", "", { "dependencies": { "queue-microtask": "^1.2.2" } }, "sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA=="],
+
+    "rxjs": ["rxjs@7.8.2", "", { "dependencies": { "tslib": "^2.1.0" } }, "sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA=="],
 
     "safe-array-concat": ["safe-array-concat@1.1.3", "", { "dependencies": { "call-bind": "^1.0.8", "call-bound": "^1.0.2", "get-intrinsic": "^1.2.6", "has-symbols": "^1.1.0", "isarray": "^2.0.5" } }, "sha512-AURm5f0jYEOydBj7VQlVvDrjeFgthDdEF5H1dP+6mNpoXOMo1quQqJ4wvJDyRZ9+pO3kGWoOdmV08cSv2aJV6Q=="],
 
