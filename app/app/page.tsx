@@ -11,6 +11,7 @@ import { DashboardView } from "@/components/views/dashboard-view";
 
 /**
  * Main app page using query params for routing.
+ * Added all in one to make it easier to cache the whole app and to avoid making dynamic routes.
  *
  * URL patterns:
  * - /app → redirects to dashboard (/)
