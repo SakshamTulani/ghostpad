@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import {
-  Ghost,
   Mail,
   KeyRound,
   AlertCircle,
@@ -27,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { useForm } from "@tanstack/react-form";
 import { emailSchema, otpSchema } from "@/lib/schemas";
 import { resolveText } from "dexie-cloud-addon";
+import { Logo } from "../logo";
 
 export function LoginDialog() {
   const userInteraction = useObservable(db.cloud.userInteraction);
@@ -352,8 +352,8 @@ export function LoginDialog() {
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent showCloseButton={false} className="sm:max-w-md">
         <DialogHeader className="items-center text-center">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground mb-2">
-            <Ghost className="h-6 w-6" />
+          <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-muted/50 shadow-xl border border-border/50 backdrop-blur-sm">
+            <Logo size={64} className="animate-bounce-slow" />
           </div>
           <DialogTitle className="text-xl">{getTitle()}</DialogTitle>
           {getDescription() && (
