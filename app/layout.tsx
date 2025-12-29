@@ -78,7 +78,7 @@ export default function RootLayout({
     <html lang="en" className={publicSans.variable} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <SerwistProvider swUrl="/serwist/sw.js">
+        <SerwistProvider swUrl="/serwist/sw.js" reloadOnOnline={false}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
