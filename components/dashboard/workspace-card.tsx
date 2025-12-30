@@ -144,8 +144,8 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action will move &quot;<strong>{workspace.name}</strong>
-              &quot; to the trash. You can restore it later.
+              This action will delete &quot;<strong>{workspace.name}</strong>
+              &quot; and all its pages. This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
