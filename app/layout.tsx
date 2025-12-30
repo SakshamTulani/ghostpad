@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   description: APP_DESCRIPTION,
   icons: {
     icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon.svg", type: "image/svg+xml" },
       { url: "/icon1.png", type: "image/png", sizes: "32x32" },
     ],
     apple: "/apple-icon.png",
